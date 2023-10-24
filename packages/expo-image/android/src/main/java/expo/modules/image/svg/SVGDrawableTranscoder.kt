@@ -25,6 +25,8 @@ class SVGDrawableTranscoder(val context: Context) : ResourceTranscoder<SVG?, Dra
     val drawable = PictureDrawable(picture)
     val width = drawable.intrinsicWidth
     val height = drawable.intrinsicHeight
+    val svgIntrinsicWidth = toTranscode.get().documentViewBox.width().toInt()
+    val svgIntrinsicHeight = toTranscode.get().documentViewBox.height().toInt()
 
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
@@ -32,6 +34,6 @@ class SVGDrawableTranscoder(val context: Context) : ResourceTranscoder<SVG?, Dra
     drawable.draw(canvas)
 
     val newDrawable = BitmapDrawable(context.resources, bitmap)
-    return SimpleResource(newDrawable)
+    return SimpleResource(SVGBitmapDrawableDelegate(newDrawable, svgIntrinsicWidth, svgIntrinsicHeight))
   }
 }
